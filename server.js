@@ -15,6 +15,15 @@ app.use(fileUpload({
     useTempFiles: true
 }))
 
+// Routes
+app.use('/user', require('./routes/userRouter'))
+app.use('/api', require('./routes/categoryRouter'))
+app.use('/api', require('./routes/upload'))
+app.use('/api', require('./routes/productRouter'))
+app.use('/api', require('./routes/paymentRouter'))
+
+
+// Connect to mongodb
 const URI = process.env.MONGODB_URL
 mongoose.connect(URI, {
   
@@ -23,15 +32,12 @@ mongoose.connect(URI, {
     console.log('Connected to MongoDB')
 })
 
-app.get('/',(req,res) => {
-    res.json({msg:"Hello world"})
-})
-// if(process.env.NODE_ENV === 'production'){
-//     app.use(express.static('client/build'))
-//     app.get('*', (req, res) => {
-//         res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
-//     })
-// }
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static('client/build'))
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
+    })
+}
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () =>{
     console.log('Server is running on port', PORT)
