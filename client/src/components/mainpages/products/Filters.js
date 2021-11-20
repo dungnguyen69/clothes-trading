@@ -33,7 +33,7 @@ function Filters() {
                 <select  value={sort} onChange={e=> setSort(e.target.value)}>
                     <option value="">Newest</option>
                     <option value="sort=oldest">Oldest</option>
-                    <option value="sold=-sold">Best sales</option>
+                    <option value="sort=-sold">Best sales</option>
                     <option value="sort=-price">Price: High-Low</option>
                     <option value="sort=price">Price: Low-High</option>
 
