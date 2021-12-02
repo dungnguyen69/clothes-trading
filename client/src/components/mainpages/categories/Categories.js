@@ -18,7 +18,8 @@ function Categories() {
                 const res = await axios.put(`/api/category/${id}`, {name: category}, {
                     headers: {Authorization: token}
                 })
-                alert(res.data.msg)
+                console.log(res)
+                // alert(res.data.msg)
             }else{
                 const res = await axios.post('/api/category', {name: category}, {
                     headers: {Authorization: token}

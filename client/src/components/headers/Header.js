@@ -12,7 +12,6 @@ function Header() {
     const [isAdmin] = state.userAPI.isAdmin
     const [cart] = state.userAPI.cart
     const [menu, setMenu] = useState(false)
-
     const logoutUser = async () =>{
         await axios.get('/user/logout')
                 
@@ -28,11 +27,24 @@ function Header() {
         )
     }
 
+
     const loggedRouter = () =>{
         return(
             <>
                 <li><Link to="/history">History</Link></li>
+                <li>
+                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <Link to="/profile">
+                            <a>Profile</a>
+                        </Link>
+                        {/* {
+                            isAdmin && adminRouter()
+                        }
+                        <div className="dropdown-divider"></div> */}
+                    </div>
+                </li>
                 <li><Link to="/" onClick={logoutUser}>Logout</Link></li>
+
             </>
         )
     }

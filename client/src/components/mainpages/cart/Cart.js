@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect} from 'react'
 import {GlobalState} from '../../../GlobalState'
-// import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
+import Button from 'react-bootstrap/Button';
 import axios from 'axios'
 import PaypalButton from './PaypalButton'
 function Cart() {
@@ -8,6 +9,12 @@ function Cart() {
     const [cart, setCart] = state.userAPI.cart
     const [token] = state.token 
     const [total,setTotal] = useState(0)
+    const goToCheckout = e => {
+        // history.push(`/checkout/${this.props.cart.id}`)
+        localStorage.setItem('cart-id', this.props.cart.id)
+        this.props.setModalOpen(false)
+        this.props.setCheckout(true)
+    }
     useEffect(() => {
         const getTotal = () =>{
             const total = cart.reduce((prev,item)=>{
@@ -90,12 +97,25 @@ function Cart() {
                     </div>
                 ))
             }
+            <form>
+            <label>
+                Name:
+                <input type="text" name="name" />
+            </label>
+            <input type="submit" value="Submit" />
+            </form>
             <div className="total">
                 <h3>Total: $ {total}</h3>
                 <PaypalButton 
+
                 total={total}
                 tranSuccess = {tranSuccess} />
+                {/* <Button 
+                component={Link} to="/checkout" size="large" type="button" variant="contained" color="primary">
+                Checkout
+                </Button> */}
             </div>
+           
         </div>
     )
 }

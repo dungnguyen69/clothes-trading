@@ -3,7 +3,8 @@ const cloudinary = require('cloudinary')
 const auth = require('../middleware/auth')
 const authAdmin = require('../middleware/authAdmin')
 const fs = require('fs')
-
+const uploadImage = require('../middleware/uploadImage')
+const uploadCtrl = require('../controllers/uploadCtrl')
 
 // we will upload image on cloudinary
 cloudinary.config({
@@ -60,6 +61,7 @@ router.post('/destroy', auth,authAdmin, (req, res) =>{
     }
     
 })
+router.post('/upload_avatar', uploadImage, auth, uploadCtrl.uploadAvatar)
 
 
 const removeTmp = (path) =>{

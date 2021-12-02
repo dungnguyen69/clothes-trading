@@ -6,6 +6,7 @@ import Login from './auth/Login'
 import Register from './auth/Register'
 import OrderHistory from './history/OrderHistory'
 import OrderDetails from './history/OrderDetails'
+import Profile from './profile/profile'
 import Cart from './cart/Cart'
 import NotFound from './utils/not_found/NotFound'
 import Categories from './categories/Categories'
@@ -32,6 +33,7 @@ function Pages() {
             <Route path="/edit_product/:id" exact component={isAdmin ?  CreateProduct : NotFound} />
 
             <Route path="/cart" exact component={Cart} />
+            <Route path="/profile" exact component={isLogged ?  Profile : NotFound} />
 
 
             <Route path="*" exact component={NotFound} />

@@ -5,6 +5,7 @@ function UserAPI(token) {
     const [isLogged, setIsLogged] = useState(false)
     const [isAdmin, setIsAdmin] = useState(false)
     const [cart, setCart] = useState([])
+    const [users, setUsers] = useState([])
     const [history, setHistory] = useState([])
     const [callback, setCallback] = useState(false)
     useEffect(() =>{
@@ -15,6 +16,7 @@ function UserAPI(token) {
                         headers: {Authorization: token}
                     })
                     setIsLogged(true)
+                    setUsers(res.data)
                     res.data.role === 1 ? setIsAdmin(true) : setIsAdmin(false)
 
                     setCart(res.data.cart)
@@ -28,6 +30,7 @@ function UserAPI(token) {
             
         }
     },[token])
+
     useEffect(() => {
        if(token){
            const getHistory = async() =>{
@@ -48,7 +51,6 @@ function UserAPI(token) {
        }
     }, [token, callback, isAdmin])
     
-
     const addCart = async (product) => {
         if(!isLogged) return alert("Please login to continue buying")
 
@@ -67,11 +69,12 @@ function UserAPI(token) {
             alert("This product has been added to cart.")
         }
     }
-
+    
     return {
         isLogged: [isLogged, setIsLogged],
         isAdmin: [isAdmin, setIsAdmin],
         cart: [cart, setCart],
+        users: [users, setUsers],
         addCart: addCart,
         history: [history, setHistory],
         callback: [callback, setCallback]

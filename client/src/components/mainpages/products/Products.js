@@ -13,6 +13,7 @@ const Products = () => {
     const [callback,setCallback] = state.productsAPI.callback
     const [loading, setLoading] = useState(false)
     const [isCheck, setIsCheck] = useState(false)
+    console.log(state);
 
     const handleCheck = (id)=>{
         products.forEach(product => {

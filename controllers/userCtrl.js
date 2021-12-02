@@ -2,7 +2,8 @@ const Users = require('../models/userModel')
 const Payments = require('../models/paymentModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
+const sendMail = require('./sendMails')
+const CLIENT_URL = process.env
 const userCtrl = {
     register: async (req, res) =>{
         try {
@@ -101,6 +102,18 @@ const userCtrl = {
             return res.status(500).json({msg: err.message})
         }
     },
+    updateUser: async (req, res) => {
+        try {
+            const {name, avatar} = req.body
+            await Users.findOneAndUpdate({_id: req.user.id}, {
+                name, avatar
+            })
+
+            res.json({msg: "Update Success!"})
+        } catch (err) {
+            return res.status(500).json({msg: err.message})
+        }
+    },
     addCart: async (req, res) =>{
         try {
             const user = await Users.findById(req.user.id)
@@ -123,7 +136,35 @@ const userCtrl = {
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }
-    }
+    },
+    profile: async (req, res) => {
+        try {
+           const result = await auth(req, res)
+           if(result.role !== 'admin') 
+           return res.status(400).json({err: "Authentication is not valid"})
+    
+            const users = await Users.find().select('-password')
+            return res.json({users})
+    
+        } catch (err) {
+            return res.status(500).json({err: err.message})
+        }
+    },
+    resetPassword: async (req, res) => {
+        try {
+            const {password} = req.body
+            console.log(password)
+            const passwordHash = await bcrypt.hash(password, 12)
+
+            await Users.findOneAndUpdate({_id: req.user.id}, {
+                password: passwordHash
+            })
+
+            res.json({msg: "Password successfully changed!"})
+        } catch (err) {
+            return res.status(500).json({msg: err.message})
+        }
+    },
  }
 
 

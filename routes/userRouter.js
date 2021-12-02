@@ -16,4 +16,10 @@ router.patch('/addcart', auth, userCtrl.addCart)
 
 router.get('/history', auth, userCtrl.history)
 
+router.get('/profile', auth, userCtrl.profile)
+
+router.post('/reset', auth, userCtrl.resetPassword)
+
+router.patch('/update', auth, userCtrl.updateUser)
+
 module.exports = router
