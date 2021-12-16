@@ -11,16 +11,17 @@ export const GlobalState = createContext()
 export const DataProvider = ({children}) =>{
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
-    const [token, setToken] = useState(false)
-    //////////// For UserAPI
-    useEffect(()=>{
-        const refreshToken = async() =>{
-            const res = await axios.post('/user/refresh_token', null)
-            setToken(res.data.access_token)
-            dispatch({type: 'GET_TOKEN', payload: res.data.access_token})
-        }
-        refreshToken()
-    }, [auth.isLogged, dispatch])
+    const token = useSelector(state => state.token)    //////////// For UserAPI
+    useEffect(() => {
+    const firstLogin = localStorage.getItem('firstLogin')
+    if(firstLogin){
+      const getToken = async () => {
+        const res = await axios.post('/user/refresh_token', null)
+        dispatch({type: 'GET_TOKEN', payload: res.data.access_token})
+      }
+      getToken()
+    }
+  },[auth.isLogged, dispatch])
     useEffect(() => {
         if(token){
           const getUser = () => {
