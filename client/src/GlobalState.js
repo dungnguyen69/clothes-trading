@@ -53,7 +53,7 @@ export const DataProvider = ({children}) =>{
 
 
     const state = {
-        token: [token, setToken],
+        token: token,
         productsAPI: ProductsAPI(),
         userAPI: UserAPI(token),
         categoriesAPI: CategoriesAPI() 
