@@ -61,6 +61,8 @@ router.post('/destroy', auth,authAdmin, (req, res) =>{
     }
     
 })
+
+// Upload user's avatar
 router.post('/upload_avatar', uploadImage, auth, uploadCtrl.uploadAvatar)
 
 

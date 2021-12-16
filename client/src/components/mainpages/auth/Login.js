@@ -1,37 +1,100 @@
 import React, {useState} from 'react'
-import {Link} from 'react-router-dom' 
+import {Link, useHistory } from 'react-router-dom' 
 import axios from "axios"
+import { showSuccessMsg, showErrMsg } from '../utils/notification/Notification'
+import {dispatchLogin} from '../../../redux/actions/authAction'
+import {useDispatch} from 'react-redux'
+import { GoogleLogin } from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
 function Login() {
     const [user, setUser] = useState({
-        email: '', password: ''
+        email: '', password: '', err: '',
+        success: ''
     })
+    const dispatch = useDispatch()
+    const history = useHistory()
+    const {email, password, err, success} = user
     const onChangeInput = e =>{
         const {name,value} = e.target;
-        setUser({...user,[name]:value})
+        setUser({...user,[name]:value, err: '', success: ''})
     }
-    const loginSubmit = async e=>{
+    const loginSubmit = async e=>{  
         e.preventDefault();
         try {
-            await axios.post('user/login', {...user})
+            const res = await axios.post('user/login', {email, password})
+            setUser({...user, err: '', success: res.data.msg})
             localStorage.setItem('firstLogin', true)
-            window.location.href = "/";
+            dispatch(dispatchLogin())
+            history.push("/")
         } catch (error) {
-            alert(error.response.data.msg)
+            error.response.data.msg && 
+            setUser({...user, err: error.response.data.msg, success: ''})
+        }
+    }
+    const responseGoogle = async (response) => {
+        try {
+            const res = await axios.post('/user/google_login', {tokenId: response.tokenId})
+            setUser({...user, error:'', success: res.data.msg})
+            localStorage.setItem('firstLogin', true)
+            dispatch(dispatchLogin())
+            history.push('/')
+        } catch (err) {
+            err.response.data.msg && 
+            setUser({...user, err: err.response.data.msg, success: ''})
+        }
+    }
+
+    const responseFacebook = async (response) => {
+        try {
+            console.log(response);
+            const {accessToken, userID} = response
+            const res = await axios.post('/user/facebook_login', {accessToken, userID})
+
+            setUser({...user, error:'', success: res.data.msg})
+            localStorage.setItem('firstLogin', true)
+
+            dispatch(dispatchLogin())
+            history.push('/')
+        } catch (err) {
+            err.response.data.msg && 
+            setUser({...user, err: err.response.data.msg, success: ''})
         }
     }
     return (
         <div className="login-page">
+            {err && showErrMsg(err)}
+            {success && showSuccessMsg(success)}
             <form onSubmit = {loginSubmit}>
                 <h2>Login</h2>
-                <input type = "email" name="email" placeholder="Email"
-                 value= {user.email} onChange = {onChangeInput}/>
-                <input type = "password" name="password" placeholder="Password"
-                 value= {user.password} onChange = {onChangeInput} autoComplete = "on"/>
+                <label htmlFor='email'>Email</label>
+                <input type = "email" name="email" placeholder="Email" id = 'email'
+                 value= {email} onChange = {onChangeInput}/>
+                <label htmlFor='password'>Password</label>
+                <input type = "password" name="password" placeholder="Password" id = 'password'
+                 value= {password} onChange = {onChangeInput} autoComplete = "on"/>
                 <div className="row">
-                    <button type="Submit">Login</button>
-                    <Link to="/register">Register</Link>
+                    <button type="submit">Login</button>
+                    <Link to="/forgot_password">Forgot password</Link>
                 </div>
             </form>
+
+            <div className="hr">Or Login With</div>
+
+            <div className="social">
+                <GoogleLogin
+                    clientId="938271584820-sf7tk3sdc9m41up1ckbspprp149kf7fk.apps.googleusercontent.com"
+                    buttonText="Login with google"
+                    onSuccess={responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                />
+                <FacebookLogin
+                appId="978833802710350"
+                autoLoad={false}
+                fields="name,email,picture"
+                callback={responseFacebook} />
+            </div>
+            <p>New customer? <Link to="/register">Register</Link></p>
+
         </div>
     )
 }

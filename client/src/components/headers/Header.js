@@ -5,19 +5,38 @@ import Close from './icon/close.svg'
 import Cart from './icon/cart.svg'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
 function Header() {
     const state = useContext(GlobalState)
     const [isLogged] = state.userAPI.isLogged
     const [isAdmin] = state.userAPI.isAdmin
+    const [users] = state.userAPI.users
     const [cart] = state.userAPI.cart
     const [menu, setMenu] = useState(false)
     const logoutUser = async () =>{
-        await axios.get('/user/logout')
-                
-        window.location.href = "/";
+        try {
+            await axios.get('/user/logout')
+            localStorage.removeItem('firstLogin')
+            window.location.href = "/";
+        } catch (err) {
+            window.location.href = "/";
+        }
     }
-
+    const userLink = () => {
+        return <li className="drop-nav">
+            <Link to="#" className="avatar">
+            <img src={users.avatar} alt=""/> {users.name} <FontAwesomeIcon icon={faAngleDown} />
+            </Link>
+            <ul className="dropdown">
+                <li><Link to="/profile">Profile</Link></li>
+                {isAdmin?<li><Link to="/history">History</Link></li>:""}
+                <li><Link to="/" onClick={logoutUser}>Logout</Link></li>
+            </ul>
+            
+            
+        </li>
+    }
     const adminRouter = () =>{
         return(
             <>
@@ -31,29 +50,23 @@ function Header() {
     const loggedRouter = () =>{
         return(
             <>
-                <li><Link to="/history">History</Link></li>
-                <li>
-                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <Link to="/profile">
-                            <a>Profile</a>
-                        </Link>
-                        {/* {
-                            isAdmin && adminRouter()
-                        }
-                        <div className="dropdown-divider"></div> */}
-                    </div>
-                </li>
-                <li><Link to="/" onClick={logoutUser}>Logout</Link></li>
 
+                {
+                    isLogged
+                    ? userLink()
+                    :""                  
+                }
             </>
         )
     }
 
 
     const styleMenu = {
-        left: menu ? 0 : "-100%"
-    }
+        left: menu ? 0 : "-100%",
+        transform: isLogged ? "translateY(-5px)" : 0
 
+    }
+    
     return (
         <header>
             <div className="menu" onClick={() => setMenu(!menu)}>

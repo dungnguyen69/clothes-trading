@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect} from 'react'
 import {GlobalState} from '../../../GlobalState'
 import {Link} from 'react-router-dom'
-import Button from 'react-bootstrap/Button';
+// import { Button } from 'react-native'
 import axios from 'axios'
 import PaypalButton from './PaypalButton'
 function Cart() {
@@ -97,25 +97,29 @@ function Cart() {
                     </div>
                 ))
             }
-            <form>
+            {/* <form>
             <label>
                 Name:
                 <input type="text" name="name" />
             </label>
             <input type="submit" value="Submit" />
-            </form>
+            </form> */}
+
             <div className="total">
                 <h3>Total: $ {total}</h3>
-                <PaypalButton 
 
+                {/* <div className="checkout">
+                <Link id="btn_checkout" to={`/checkout`}>
+                        Checkout
+                </Link>
+                </div> */}
+
+                <PaypalButton 
                 total={total}
                 tranSuccess = {tranSuccess} />
-                {/* <Button 
-                component={Link} to="/checkout" size="large" type="button" variant="contained" color="primary">
-                Checkout
-                </Button> */}
+
             </div>
-           
+
         </div>
     )
 }
