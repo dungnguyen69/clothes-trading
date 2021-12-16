@@ -11,28 +11,27 @@ export const GlobalState = createContext()
 export const DataProvider = ({children}) =>{
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
-    const token = useSelector(state => state.token)    //////////// For UserAPI
-    useEffect(() => {
-    const firstLogin = localStorage.getItem('firstLogin')
-    if(firstLogin){
-      const getToken = async () => {
-        const res = await axios.post('/user/refresh_token', null)
-        dispatch({type: 'GET_TOKEN', payload: res.data.access_token})
-      }
-      getToken()
-    }
-  },[auth.isLogged, dispatch])
-    useEffect(() => {
-        if(token){
-          const getUser = () => {
-            dispatch(dispatchLogin())
-            return fetchUser(token).then(res => {
-              dispatch(dispatchGetUser(res))
-            })
-          }
-          getUser()
+    const token = useSelector(state => state.token)    
+    //////////// For UserAPI
+    // const [token, setToken] = useState(false)
+
+
+    useEffect(() =>{
+        const firstLogin = localStorage.getItem('firstLogin')
+        if(firstLogin){
+            const refreshToken = async () =>{
+                const res = await axios.post('/user/refresh_token')
+        
+                // setToken(res.data.accesstoken)
+    
+                setTimeout(() => {
+                    refreshToken()
+                }, 10 * 60 * 1000)
+            }
+            refreshToken()
         }
-      },[token, dispatch])
+    },[])
+
     ////////////////////
 
   //   useEffect(() =>{
