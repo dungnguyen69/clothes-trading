@@ -17,18 +17,20 @@ const initialState = {
 }
 
 function Profile() {
-    const state = useContext(GlobalState)
     const auth = useSelector(state => state.auth)
-    const [token] = state.token
+    const token = useSelector(state => state.token)
+
     const users = useSelector(state => state.users)
+
     const {user, isAdmin} = auth
     const [data, setData] = useState(initialState)
     const {name, password, cf_password, err, success} = data
+
     const [avatar, setAvatar] = useState(false)
     const [loading, setLoading] = useState(false)
     const [callback, setCallback] = useState(false)
+
     const dispatch = useDispatch()
-    const [history, setHistory] = state.userAPI.history
 
     useEffect(() => {
         if(isAdmin){
@@ -37,24 +39,7 @@ function Profile() {
             })
         }
     },[token, isAdmin, dispatch, callback])
-    useEffect(() => {
-        if(token){
-            const getHistory = async() =>{
-                if(isAdmin){
-                    const res = await axios.get('/api/payment', {
-                        headers: {Authorization: token}
-                    })
-                    setHistory(res.data)
-                }else{
-                    const res = await axios.get('/user/history', {
-                        headers: {Authorization: token}
-                    })
-                    setHistory(res.data)
-                }
-            }
-            getHistory()
-        }
-    },[token, isAdmin, setHistory])
+
     const handleChange = e => {
         const {name, value} = e.target
         setData({...data, [name]:value, err:'', success: ''})
@@ -152,7 +137,6 @@ function Profile() {
             {success && showSuccessMsg(success)}
             {loading && <h3>Loading.....</h3>}
         </div>
-
         <div className="profile_page">
             <div className="col-left">
                 <h2>{isAdmin ? "Admin Profile": "User Profile"}</h2>
@@ -201,8 +185,9 @@ function Profile() {
             </div>
 
             <div className="col-right">
-                <h2>{isAdmin ? "Users" : ""}</h2>
-                    {isAdmin ?  <div style={{overflowX: "auto"}}>
+                <h2>{isAdmin ? "Users" : "My Orders"}</h2>
+
+                <div style={{overflowX: "auto"}}>
                     <table className="customers">
                         <thead>
                             <tr>
@@ -214,66 +199,39 @@ function Profile() {
                             </tr>
                         </thead>
                         <tbody>
-                            {
-                                users.map(user => (
-                                    <tr key={user._id}>
-                                        <td>{user._id}</td>
-                                        <td>{user.name}</td>
-                                        <td>{user.email}</td>
-                                        <td>
-                                            {
-                                                user.role === 1
-                                                ? <FaCheck title="Admin" color="green"/>
-                                                : <FaTimes title="Users" color="red"/>
-                                            }
-                                        </td>
-                                        <td>
+                        {
+                            users.map(user => (
+                                <tr key={user._id}>
+                                    <td>{user._id}</td>
+                                    <td>{user.name}</td>
+                                    <td>{user.email}</td>
+                                    <td>
+                                        {
+                                            user.role === 1
+                                            ? <FaCheck title="Admin" color="green"/>
+                                            : <FaTimes title="Users" color="red"/>
+                                        }
+                                    </td>
+                                    <td>
 
-                                            <Link to={`/edit_user/${user._id}`}>
-                                            <i className="fa-edit">
-                                            <FaEdit title="Edit" />
-                                            </i>
-                                            </Link>
+                                        <Link to={`/edit_user/${user._id}`}>
+                                        <i className="fa-edit">
+                                        <FaEdit title="Edit" />
+                                        </i>
+                                        </Link>
 
-                                             <i className="fa-trash-alt">
-                                            <FaTrashAlt title="Remove"  onClick={() => handleDelete(user._id)}/>
-                                            </i>
+                                        <i className="fa-trash-alt">
+                                        <FaTrashAlt title="Remove"  onClick={() => handleDelete(user._id)}/>
+                                        </i>
 
 
-                                        </td>
-                                    </tr>
-                                ))
-                            }
+                                    </td>
+                                </tr>
+                            ))
+                        }
                         </tbody>
                     </table>
                 </div>
-                : <div className="history-page">
-            <h2>History</h2>
-
-            <h4>You have {history.length} orders</h4>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Payment ID</th>
-                        <th>Date of Purchased</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        history.map(items => (
-                            <tr key={items._id}>
-                                <td>{items.paymentID}</td>
-                                <td>{new Date(items.createdAt).toLocaleDateString()}</td>
-                                <td><Link to={`/history/${items._id}`}>View</Link></td>
-                            </tr>
-                        ))
-                    }
-                </tbody>
-            </table>
-        </div>}
-               
             </div>
         </div>
         </>
