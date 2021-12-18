@@ -1,12 +1,13 @@
 import React, {useState, useContext} from 'react'
 import {GlobalState} from '../../../GlobalState'
 import axios from 'axios'
+import { useSelector} from 'react-redux'
 
 function Categories() {
     const state = useContext(GlobalState)
     const [categories] = state.categoriesAPI.categories
     const [category, setCategory] = useState('')
-    const [token] = state.token
+    const token = useSelector(state => state.token)
     const [callback, setCallback] = state.categoriesAPI.callback
     const [onEdit, setOnEdit] = useState(false)
     const [id, setID] = useState('')

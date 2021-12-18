@@ -2,12 +2,14 @@ import React, { useContext, useState, useEffect} from 'react'
 import {GlobalState} from '../../../GlobalState'
 import {Link} from 'react-router-dom'
 // import { Button } from 'react-native'
+import { useSelector} from 'react-redux'
+
 import axios from 'axios'
 import PaypalButton from './PaypalButton'
 function Cart() {
     const state = useContext(GlobalState)
     const [cart, setCart] = state.userAPI.cart
-    const [token] = state.token 
+    const token = useSelector(state => state.token)
     const [total,setTotal] = useState(0)
     const goToCheckout = e => {
         // history.push(`/checkout/${this.props.cart.id}`)
