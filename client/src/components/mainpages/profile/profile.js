@@ -21,6 +21,7 @@ function Profile() {
     const token = useSelector(state => state.token)
 
     const users = useSelector(state => state.users)
+    const state = useContext(GlobalState)
 
     const {user, isAdmin} = auth
     const [data, setData] = useState(initialState)
@@ -29,6 +30,7 @@ function Profile() {
     const [avatar, setAvatar] = useState(false)
     const [loading, setLoading] = useState(false)
     const [callback, setCallback] = useState(false)
+    const [history, setHistory] = state.userAPI.history
 
     const dispatch = useDispatch()
 
@@ -185,22 +187,24 @@ function Profile() {
             </div>
 
             <div className="col-right">
-                <h2>{isAdmin ? "Users" : "My Orders"}</h2>
+                <h2>{isAdmin ? "Users" : ""}</h2>
 
                 <div style={{overflowX: "auto"}}>
                     <table className="customers">
                         <thead>
+                        {isAdmin?
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Admin</th>
                                 <th>Action</th>
-                            </tr>
+                            </tr>: ""}
+                            
                         </thead>
                         <tbody>
-                        {
-                            users.map(user => (
+                        {isAdmin ? 
+                            (users.map(user => (
                                 <tr key={user._id}>
                                     <td>{user._id}</td>
                                     <td>{user.name}</td>
@@ -223,12 +227,37 @@ function Profile() {
                                         <i className="fa-trash-alt">
                                         <FaTrashAlt title="Remove"  onClick={() => handleDelete(user._id)}/>
                                         </i>
-
-
                                     </td>
                                 </tr>
-                            ))
-                        }
+                            )))
+                        : 
+                        <div className="history-page">
+                            <h2>History</h2>
+
+                            <h4>You have {history.length} orders</h4>
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Payment ID</th>
+                                        <th>Date of Purchased</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        history.map(items => (
+                                            <tr key={items._id}>
+                                                <td>{items.paymentID}</td>
+                                                <td>{new Date(items.createdAt).toLocaleDateString()}</td>
+                                                <td><Link to={`/history/${items._id}`}>View</Link></td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                        </div>}
+                        
                         </tbody>
                     </table>
                 </div>
