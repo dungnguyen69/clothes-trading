@@ -6,49 +6,36 @@ import {dispatchLogin} from '../../../redux/actions/authAction'
 import {useDispatch} from 'react-redux'
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
-const initialState = {
-    email: '',
-    password: '',
-    err: '',
-    success: ''
-}
 function Login() {
-    const [user, setUser] = useState(initialState)
+    const [user, setUser] = useState({
+        email: '', password: '', err: '',
+        success: ''
+    })
     const dispatch = useDispatch()
     const history = useHistory()
-
     const {email, password, err, success} = user
-
-    const handleChangeInput = e => {
-        const {name, value} = e.target
-        setUser({...user, [name]:value, err: '', success: ''})
+    const onChangeInput = e =>{
+        const {name,value} = e.target;
+        setUser({...user,[name]:value, err: '', success: ''})
     }
-
-
-    const handleSubmit = async e => {
-        e.preventDefault()
+    const loginSubmit = async e=>{  
+        e.preventDefault();
         try {
-            const res = await axios.post('/user/login', {email, password})
+            const res = await axios.post('user/login', {email, password})
             setUser({...user, err: '', success: res.data.msg})
-
             localStorage.setItem('firstLogin', true)
-
             dispatch(dispatchLogin())
             history.push("/")
-
-        } catch (err) {
-            err.response.data.msg && 
-            setUser({...user, err: err.response.data.msg, success: ''})
+        } catch (error) {
+            error.response.data.msg && 
+            setUser({...user, err: error.response.data.msg, success: ''})
         }
     }
-
     const responseGoogle = async (response) => {
         try {
             const res = await axios.post('/user/google_login', {tokenId: response.tokenId})
-
             setUser({...user, error:'', success: res.data.msg})
             localStorage.setItem('firstLogin', true)
-
             dispatch(dispatchLogin())
             history.push('/')
         } catch (err) {
@@ -59,6 +46,7 @@ function Login() {
 
     const responseFacebook = async (response) => {
         try {
+            console.log(response);
             const {accessToken, userID} = response
             const res = await axios.post('/user/facebook_login', {accessToken, userID})
 
@@ -72,29 +60,21 @@ function Login() {
             setUser({...user, err: err.response.data.msg, success: ''})
         }
     }
-
     return (
         <div className="login-page">
-            <h2>Login</h2>
             {err && showErrMsg(err)}
             {success && showSuccessMsg(success)}
-
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="email">Email Address</label>
-                    <input type="text" placeholder="Enter email address" id="email"
-                    value={email} name="email" onChange={handleChangeInput} />
-                </div>
-
-                <div>
-                    <label htmlFor="password">Password</label>
-                    <input type="password" placeholder="Enter password" id="password"
-                    value={password} name="password" onChange={handleChangeInput} />
-                </div>
-
+            <form onSubmit = {loginSubmit}>
+                <h2>Login</h2>
+                <label htmlFor='email'>Email</label>
+                <input type = "email" name="email" placeholder="Email" id = 'email'
+                 value= {email} onChange = {onChangeInput}/>
+                <label htmlFor='password'>Password</label>
+                <input type = "password" name="password" placeholder="Password" id = 'password'
+                 value= {password} onChange = {onChangeInput} autoComplete = "on"/>
                 <div className="row">
                     <button type="submit">Login</button>
-                    <Link to="/forgot_password">Forgot your password?</Link>
+                    <Link to="/forgot_password">Forgot password</Link>
                 </div>
             </form>
 
@@ -107,17 +87,14 @@ function Login() {
                     onSuccess={responseGoogle}
                     cookiePolicy={'single_host_origin'}
                 />
-                
                 <FacebookLogin
                 appId="978833802710350"
                 autoLoad={false}
                 fields="name,email,picture"
-                callback={responseFacebook} 
-                />
-
+                callback={responseFacebook} />
             </div>
+            <p>New customer? <Link to="/register">Register</Link></p>
 
-            <p>New Customer? <Link to="/register">Register</Link></p>
         </div>
     )
 }
