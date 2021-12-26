@@ -233,7 +233,7 @@ const userCtrl = {
         try {
             const {password} = req.body
             console.log(password)
-            const passwordHash = await bcrypt.hash(password, 12) // hash password
+            const passwordHash = await bcrypt.hash(password, 12)
 
             await Users.findOneAndUpdate({_id: req.user.id}, {
                 password: passwordHash
@@ -298,7 +298,8 @@ const userCtrl = {
         try {
             const {accessToken, userID} = req.body
 
-            const URL = `https://graph.facebook.com/v4.0/${userID}/?fields=id,name,email,picture&access_token=${accessToken}`
+            const URL = `https://graph.facebook.com/v2.9/${userID}/?fields=id,name,email,picture&access_token=${accessToken}`
+            
             const data = await fetch(URL).then(res => res.json()).then(res => {return res})
 
             const {email, name, picture} = data

@@ -63,3 +63,5 @@ const sendEmail = (to, url, txt) => {
 }
 
 module.exports = sendEmail
+
+

@@ -7,22 +7,10 @@ export const fetchAllUsers = async (token) => {
     })
     return res
 }
+
 export const dispatchGetAllUsers = (res) => {
     return {
         type: ACTIONS.GET_ALL_USERS,
-        payload: res.data
-    }
-}
-export const fetchHistory = async (token) => {
-    const res = await axios.get('/user/history', {
-        headers: {Authorization: token}
-    })
-    return res
-}
-
-export const dispatchHistory = (res) => {
-    return {
-        type: ACTIONS.GET_HISTORY,
         payload: res.data
     }
 }
