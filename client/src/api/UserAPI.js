@@ -52,6 +52,8 @@ function UserAPI(token) {
     }, [token, callback, isAdmin])
     
     const addCart = async (product) => {
+        if(!product.size) return alert("Please choose size")
+
         if(!isLogged) return alert("Please login to continue buying")
         
         const check = cart.every(item =>{

@@ -12,7 +12,6 @@ function DetailProduct() {
     const [products] = state.productsAPI.products
     const addCart = state.userAPI.addCart
     const [detailProduct, setDetailProduct] = useState([])
-    console.log(detailProduct);
     useEffect(() =>{
         if(params.id){
 
@@ -26,7 +25,7 @@ function DetailProduct() {
         setDetailProduct({...detailProduct, [name]:value})
     }
     const addToCart = (detailProduct) =>{
-        if(detailProduct.size === '') return alert("Please choose size")
+        console.log(detailProduct);
         addCart(detailProduct)
     }
     if(detailProduct.length === 0) return null;
