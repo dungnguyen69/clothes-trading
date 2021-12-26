@@ -53,20 +53,30 @@ function UserAPI(token) {
     
     const addCart = async (product) => {
         if(!isLogged) return alert("Please login to continue buying")
-
+        
         const check = cart.every(item =>{
-            return item._id !== product._id
+            return item.product_id !== product.product_id
+        })
+        const filter = cart.filter(item=> (item.product_id === product.product_id))
+        const checkSize = filter.every(item =>{
+            return item.size !== product.size
         })
 
-        if(check){
+        if(check){ //item.product_id =/= product.product_id
             setCart([...cart, {...product, quantity: 1}])
-
             await axios.patch('/user/addcart', {cart: [...cart, {...product, quantity: 1}]}, {
                 headers: {Authorization: token}
             })
+        }
+        else{ // item._id === product._id
+                if(checkSize){
+                    setCart([...cart, {...product, quantity: 1}])
+                    await axios.patch('/user/addcart', {cart: [...cart, {...product, quantity: 1}]}, {
+                        headers: {Authorization: token}
+                    })
+                }
+                else alert("This product is already added to cart")
 
-        }else{
-            alert("This product has been added to cart.")
         }
     }
     

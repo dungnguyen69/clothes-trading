@@ -12,6 +12,7 @@ const initialState = {
     description: 'How to and tutorial videos of cool CSS effect, Web Design ideas,JavaScript libraries, Node.',
     content: 'Welcome to Group 04. Here you can learn web designing, UI/UX designing, html css tutorials, css animations and css effects, javascript and jquery tutorials and related so on.',
     category: '',
+    size:'',
     _id: ''
 }
 
@@ -180,6 +181,7 @@ function CreateProduct() {
                     </select>
                 </div>
 
+               
                 <button type="submit">{onEdit? "Update" : "Create"}</button>
             </form>
         </div>

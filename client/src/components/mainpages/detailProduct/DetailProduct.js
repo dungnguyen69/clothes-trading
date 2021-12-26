@@ -3,14 +3,16 @@ import {useParams, Link} from 'react-router-dom'
 import {GlobalState} from '../../../GlobalState'
 import ProductItem from '../utils/productItem/ProductItem'
 
-
+const initialState = {
+    size:'',
+}
 function DetailProduct() {
     const params = useParams()
     const state = useContext(GlobalState)
     const [products] = state.productsAPI.products
     const addCart = state.userAPI.addCart
     const [detailProduct, setDetailProduct] = useState([])
-
+    console.log(detailProduct);
     useEffect(() =>{
         if(params.id){
 
@@ -19,7 +21,14 @@ function DetailProduct() {
             })
         }
     },[params.id, products])
-
+    const handleChangeInput = e =>{
+        const {name, value} = e.target
+        setDetailProduct({...detailProduct, [name]:value})
+    }
+    const addToCart = (detailProduct) =>{
+        if(detailProduct.size === '') return alert("Please choose size")
+        addCart(detailProduct)
+    }
     if(detailProduct.length === 0) return null;
 
     return (
@@ -31,11 +40,22 @@ function DetailProduct() {
                         <h2>{detailProduct.title}</h2>
                         <p className="id-style">#ID: {detailProduct.product_id}</p>
                     </div>
-                    <span>$ {detailProduct.price}</span>
+                    <h3 className='price'>$ {detailProduct.price}</h3>
                     <p>{detailProduct.description}</p>
                     <p className="after-view">{detailProduct.content}</p>
+                    
+                    <label htmlFor="size">Size: </label>
+                    <select name="size" value={detailProduct.size} onChange={handleChangeInput}>
+                        <option value="">Please select size</option>
+                        <option>S</option>
+                        <option>M</option>
+                        <option>L</option>
+                        <option>XL</option>
+                    </select>
+
                     <p className="after-view">Sold: <span className="sold">{detailProduct.sold}</span></p>
-                    <Link to="/cart" className="cart" onClick={() => addCart(detailProduct)}>
+                    
+                    <Link to="#!" className="cart" onClick={() =>  addToCart(detailProduct)}>
                         Buy Now
                     </Link>
                 </div>

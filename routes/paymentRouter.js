@@ -8,5 +8,6 @@ router.route('/payment')
     .get(auth, authAdmin, paymentCtrl.getPayments)
     .post(auth, paymentCtrl.createPayment)
 
+router.delete('/payment/:id', auth, authAdmin, paymentCtrl.deleteOrder)
 
 module.exports = router

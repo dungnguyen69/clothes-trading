@@ -6,7 +6,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {isLength, isMatch} from '../utils/validation/validation'
 import {showSuccessMsg, showErrMsg} from '../utils/notification/Notification'
-import {fetchAllUsers, dispatchGetAllUsers} from '../../../redux/actions/usersAction'
+import {fetchAllUsers, dispatchGetAllUsers, fetchHistory, dispatchHistory} from '../../../redux/actions/usersAction'
 import { FaCheck, FaTimes, FaEdit, FaTrashAlt } from "react-icons/fa";
 const initialState = {
     name: '',
@@ -30,7 +30,7 @@ function Profile() {
     const [avatar, setAvatar] = useState(false)
     const [loading, setLoading] = useState(false)
     const [callback, setCallback] = useState(false)
-    const [history, setHistory] = state.userAPI.history
+    const [history] = state.userAPI.history
 
     const dispatch = useDispatch()
 
@@ -41,7 +41,7 @@ function Profile() {
             })
         }
     },[token, isAdmin, dispatch, callback])
-
+    
     const handleChange = e => {
         const {name, value} = e.target
         setData({...data, [name]:value, err:'', success: ''})
@@ -249,7 +249,7 @@ function Profile() {
                                         history.map(items => (
                                             <tr key={items._id}>
                                                 <td>{items.paymentID}</td>
-                                                <td>{new Date(items.createdAt).toLocaleDateString()}</td>
+                                                <td>{new Date(items.createdAt).toLocaleDateString('en-GB')}</td>
                                                 <td><Link to={`/history/${items._id}`}>View</Link></td>
                                             </tr>
                                         ))

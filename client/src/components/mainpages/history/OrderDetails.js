@@ -6,19 +6,21 @@ function OrderDetails() {
     const state = useContext(GlobalState)
     const [history] = state.userAPI.history
     const [orderDetails, setOrderDetails] = useState([])
-
+    let total = 0
     const params = useParams()
-
     useEffect(() => {
         if(params.id){
             history.forEach(item =>{
                 if(item._id === params.id) setOrderDetails(item)
             })
         }
+
     },[params.id, history])
-
-
-    if(orderDetails.length === 0) return null;
+   
+    if(orderDetails.length === 0) {
+        console.log(orderDetails.cart);
+        return null;
+    }
 
     return (
         <div className="history-page">
@@ -45,9 +47,11 @@ function OrderDetails() {
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Products</th>
+                        <th>Product name</th>
                         <th>Quantity</th>
                         <th>Price</th>
+                        <th>Size</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -58,12 +62,15 @@ function OrderDetails() {
                             <td>{item.title}</td>
                             <td>{item.quantity}</td>
                             <td>$ {item.price * item.quantity}</td>
+                            <td> {item.size}</td>
                         </tr>
                         ))
                     }
                     
                 </tbody>
             </table>
+            {orderDetails.cart.forEach(item => total += (item.price * item.quantity))}
+            {<div className="total"><h3>Total: $ {total}</h3></div>}
         </div>
     )
 }

@@ -6,6 +6,8 @@
 .amount span{
     color: crimson;
     padding: 0 20px;
+    font-weight: bold;
+
 }
 .amount button{
     width: 40px;
@@ -41,24 +43,19 @@
 .total h3{
     color: crimson;
     padding-right: 20px;
+    
 }
-/* .total button{
-    width: 100px;
-    height: 27px;
-    background: rgb(0, 145, 227);
-    color: white;
-    border-radius: 15px;
-    letter-spacing: 2px;
-    font-weight: 700;
-}
-} */
 #btn_checkout{
     width: 100px;
     height: 27px;
     background: rgb(0, 145, 227);
     color: white;
-    border-radius: 15px;
+    border-radius: 5px;
     letter-spacing: 2px;
-    font-weight: 700;
+    /* font-weight: 700; */
     text-align: center;
+}
+.size{
+    color: crimson;
+    font-weight: bold;
 }

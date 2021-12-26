@@ -36,7 +36,16 @@ const paymentCtrl = {
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }
-    }
+    },
+    deleteOrder: async (req, res) => {
+        try {
+            console.log(req.params);
+            await Payments.findByIdAndDelete(req.params.id)
+            res.json({msg: "Deleted Success!"})
+        } catch (err) {
+            return res.status(500).json({msg: err.message})
+        }
+    },
 }
 
 const sold = async (id, quantity, oldSold) =>{

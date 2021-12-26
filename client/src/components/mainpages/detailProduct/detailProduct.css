@@ -56,3 +56,12 @@
 .id-style{
     font-weight: bold;
 }
+
+.price{
+    color: crimson;
+    font-weight: bold;
+}
+label {
+    color: black;
+    font-weight: bold;
+}
