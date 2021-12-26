@@ -21,7 +21,7 @@ function Profile() {
     const token = useSelector(state => state.token)
 
     const users = useSelector(state => state.users)
-    const state = useContext(GlobalState)
+    const stateUserAPI = useContext(GlobalState)
 
     const {user, isAdmin} = auth
     const [data, setData] = useState(initialState)
@@ -30,7 +30,7 @@ function Profile() {
     const [avatar, setAvatar] = useState(false)
     const [loading, setLoading] = useState(false)
     const [callback, setCallback] = useState(false)
-    const [history] = state.userAPI.history
+    const [history] = stateUserAPI.userAPI.history
 
     const dispatch = useDispatch()
 
@@ -42,6 +42,7 @@ function Profile() {
         }
     },[token, isAdmin, dispatch, callback])
     
+
     const handleChange = e => {
         const {name, value} = e.target
         setData({...data, [name]:value, err:'', success: ''})
@@ -188,6 +189,7 @@ function Profile() {
 
             <div className="col-right">
                 <h2>{isAdmin ? "Users" : ""}</h2>
+                <h2>{isAdmin ? "Users" : "My Orders"}</h2>
 
                 <div style={{overflowX: "auto"}}>
                     <table className="customers">
