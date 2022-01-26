@@ -42,11 +42,11 @@ const sendEmail = (to, url, txt) => {
     const mailOptions = {
                 from: SENDER_EMAIL_ADDRESS,
                 to: to,
-                subject: "E-Commerce",
+                subject: "Group 04",
                 html: `
                     <div style="max-width: 700px; margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
-                    <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the E-Commerce.</h2>
-                    <p>Congratulations! You're almost set to start using E-Commerce
+                    <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the Group 04.</h2>
+                    <p>Congratulations! You're almost set to start using Group 04
                         Just click the button below to validate your email address.
                     </p>
                     
