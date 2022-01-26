@@ -11,8 +11,6 @@ router.post('/login', userCtrl.login)
 
 router.post('/refresh_token', userCtrl.getAccessToken)
 
-router.get('/refresh_token', userCtrl.refreshToken)
-
 router.get('/logout', userCtrl.logout)
 
 router.get('/infor', auth,  userCtrl.getUser)
