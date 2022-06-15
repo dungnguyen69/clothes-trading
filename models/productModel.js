@@ -44,7 +44,11 @@ const productSchema = new mongoose.Schema({
     sold:{
         type: Number,
         default: 0
-    }
+    },
+    maxQuantity:{
+        type: Number,
+        default: 100
+    },
 }, {
     timestamps: true //important
 })
